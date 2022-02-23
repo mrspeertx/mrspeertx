@@ -1,0 +1,66 @@
+#Created by Michael Speer
+#Created on 02/13/2022
+#Created for CIS245-T301
+
+#This is a simple Python program that interfaces with a user via the console window
+#and pulls weather information from the openweathermap.org API
+#Thanks for looking!
+
+#Areas to improve: explanatory notes throughout
+#Ensuring cleaning of user input
+#Smarter error code dependent on response status code when requesting from the API
+
+import requests
+
+
+
+def get_weather(location):    
+
+    url = "http://api.openweathermap.org/data/2.5/weather?q="+location+"&units=imperial&appid="+api_key
+
+    data = requests.get(url).json()
+
+    t_current = data['main']['temp']
+    #t_current = convertF(t_current)
+    print(f"\nThe current temperature is {t_current} degrees fahrenheit\n")
+
+    t_max = data['main']['temp_max']
+    #t_max = convertF(t_max)
+    print(f"The forecasted maximum temperature for the day is {t_max} degrees fahrenheit\n")
+
+    t_min = data['main']['temp_min']
+    #t_min = convertF(t_min)
+    print(f"The forecasted minimum temperature for the day is {t_min} degrees fahrenheit\n")
+
+    weather_description = data['weather'][0]['description']
+    print(f"The weather is {weather_description}\n")
+
+
+greenlight = True
+api_key = "0dce4b48757da334873956be36c05404"
+
+while greenlight == True:
+    input_type = input(f"Would you like to search for weather by city or zipcode?\n1. Zipcode \n2. City name\nType 'q' to quit \n\n")
+    if input_type.lower() == 'q':
+        break
+
+    elif input_type == "1":
+        city_zip = input(f"What is the city's zip code?\n")
+        
+        try:
+            get_weather(city_zip)
+        except:
+            print(f"\nSomething went wrong, try again.\nMake sure your inputs are valid and you are connected to the internet.\n")
+
+    elif input_type == "2":
+        city_name = input(f"\nWhat is the name of the city?\n")
+        
+        try:
+            get_weather(city_name)
+        except:
+            print(f"\nSomething went wrong, try again.\nMake sure your inputs are valid and you are connected to the internet.\n")
+
+
+    else:
+        print(f"That was not a valid input, try again.\n")
+        continue
